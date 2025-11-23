@@ -31,7 +31,7 @@ export async function GET(
     // Check if file exists
     const filePath = join(process.cwd(), 'public', 'uploads', resource.filePath)
     console.log('Full file path:', filePath)
-    
+
     if (!existsSync(filePath)) {
       console.log('File not found on server:', filePath)
       return NextResponse.json(
@@ -60,8 +60,9 @@ export async function GET(
     // Read file and return for download
     const fileBuffer = await readFile(filePath)
     console.log('File read successfully, size:', fileBuffer.length)
-    
-    return new NextResponse(fileBuffer, {
+
+    //Convert Buffer to Uint8Array for Next.js 15 compatibility
+    return new NextResponse(new Uint8Array(fileBuffer), {
       headers: {
         'Content-Type': resource.mimeType,
         'Content-Disposition': `attachment; filename="${resource.originalName}"`,

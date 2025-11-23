@@ -52,7 +52,8 @@ export async function GET(
         // Read file and return for download
         const fileBuffer = await readFile(filePath)
 
-        return new NextResponse(fileBuffer, {
+        // Convert Buffer to Uint8Array for Next.js 15 compatibility
+        return new NextResponse(new Uint8Array(fileBuffer), {
             headers: {
                 'Content-Type': resource.mimeType,
                 'Content-Disposition': `attachment; filename="${resource.originalName}"`,
